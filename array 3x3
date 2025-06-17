@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n-1; i++) {
+        for (int j = 0; j < n-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
+                // Tukar elemen
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int A[3][3], B[3][3], C[18];
+    int index = 0;
+
+    cout << "Masukkan elemen Array A (3x3):\n";
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            cin >> A[i][j];
+
+    cout << "Masukkan elemen Array B (3x3):\n";
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            cin >> B[i][j];
+
+    // Gabungkan A dan B ke C
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            C[index++] = A[i][j];
+
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            C[index++] = B[i][j];
+
+    // Sorting
+    bubbleSort(C, 18);
+
+    // Tampilkan hasil
+    cout << "\nArray gabungan setelah disorting:\n";
+    for (int i = 0; i < 18; i++)
+        cout << C[i] << " ";
+
+    return 0;
+}
