@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Biodata Basic</title>
+</head>
+<body>
+    <center>
+    <h2>Form Biodata</h2>
+    <form method="post">
+        Nama: <input type="text" name="nama"><br><br>
+        Nim: <input type="number" name="nim"><br><br>
+        Prodi: <input type="text" name="prodi"><br><br>
+        Jenis kelamin :<input type="radio" name="jenisk" value="laki laki" id="jenisk" required>
+        <label for="identitas_mahasiswa">Laki laki</label><br>
+
+        <input type="radio" name="jenisk" value="perempuan" id="jenisk" checked>
+        <label for="jenisk">Perempuan</label><br>
+         Alamat: <input type="text" name="alamat"><br><br>
+
+        <input type="submit" value="Kirim">
+    <h2>Data yang anda masukkan</h2>
+        </center>
+    </form>
+<?php
+ $filecounter = "counter.txt";
+    $fl = fopen($filecounter, "r+");
+
+    $hit = fread($fl, filesize($filecounter));
+
+    fclose($fl);
+
+    $fl = fopen($filecounter, "w+");
+
+    $hit = $hit + 1;
+
+ 
+    fwrite($fl, $hit, strlen($hit));
+
+  
+    fclose($fl);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nama = $_POST["nama"];
+        $nim = (int)$_POST["nim"];
+        $prodi = $_POST["prodi"];
+        $jenisk = $_POST["jenisk"] == "1" ? "perempuan" : "laki laki";
+         $alamat = $_POST["alamat"];
+}
+
+        $ulangi = str_repeat("PHP ",3);
+        $tanggal = date("l, d F Y - H:i:s");
+        $tanggal = date("d-m-Y");
+        $panjang = strlen($nama);
+
+        echo("<table width=250 align=center border=1 cellspacing=0 cellpadding=0 bordercolor=#0000FF><tr>");
+        echo("<td width=250 valign=middle align=center>");
+        echo("<font face=verdana size=2 color=#FF0000><b>");
+        echo("Anda pengunjung yang ke:");
+        echo($hit);
+        echo("</b></font>");
+        echo("</td>");
+        echo("</tr></table>");
+        echo "<center><hr0><h3>saya adalah seorang mahasiswa dengan nama $nama <hr> Nim saya $nim<hr> prodi saya $prodi <hr> jeniskelamin $jenisk  <hr> alamat saya $alamat </h3></center>";
+?>
+</body>
+</html>
