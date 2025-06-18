@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Biodata Basic</title>
+</head>
+<body>
+    <h2>Form Biodata</h2>
+    <form method="post">
+        Nama: <input type="text" name="nama"><br><br>
+        Kelas: <input type="number" name="kelas"><br><br>
+        Identitas : <br>
+        <input type="radio" name="identitas" value="mahasiswa" id="identitas_mahasiswa" required>
+        <label for="identitas_mahasiswa">Mahasiswa</label><br>
+
+        <input type="radio" name="identitas" value="mahasiswi" id="identitas_mahasiswi" checked>
+        <label for="identitas_mahasiswa">Mahasiswi</label><br>
+
+        <input type="radio" name="identitas" value="mahasiswa" id="identitas_sigma" checked>
+        <label for="identitas_sigma">Sigma</label><br>
+
+        <input type="radio" name="identitas" value="mahasiswa" id="identitas_jawa" checked>
+        <label for="identitas_jawa">Jawa</label><br>
+
+        <input type="submit" value="Kirim">
+    </form>
+<?php
+
+if (empty($_POST['nama'])) {
+    echo "Error: Inputan nama tidak boleh kosong.";
+} else {
+    $nama = $_POST['nama'];
+    // Lakukan sesuatu dengan $nama
+    echo "Nama yang dimasukkan: " . $nama;
+}
+if (empty($_POST['kelas'])) {
+    echo "Error: Inputan nama tidak boleh kosong.";
+} else {
+    $kelas = $_POST['kelas'];
+    // Lakukan sesuatu dengan $nama
+    echo "Nama yang dimasukkan: " . $kelas;
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nama = $_POST["nama"];
+        $kelas = (int)$_POST["kelas"];
+}
+
+        $ulangi = str_repeat("PHP ",3);
+        $tanggal = date("l, d F Y - H:i:s");
+        $tanggal = date("d-m-Y");
+        $panjang = strlen($nama);
+
+
+        echo "<hr><h3>saya adalah seorang mahasiswa dengan nama $nama dari kelas $kelas sedang belajar $ulangi pada tanggal $tanggal dan jumlah huruf dari nama saya adalah $panjang </h3>";
+?>
+</body>
+</html>
