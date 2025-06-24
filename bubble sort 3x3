@@ -1,0 +1,65 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    const int baris = 3;
+    const int kolom = 3;
+    int array2D[baris][kolom];
+
+    // Input data array 2 dimensi
+    cout << "Masukkan elemen array 3x3:\n";
+    for (int i = 0; i < baris; i++) {
+        for (int j = 0; j < kolom; j++) {
+            cout << "Elemen [" << i << "][" << j << "]: ";
+            cin >> array2D[i][j];
+        }
+    }
+
+    // Tampilkan array sebelum diurutkan
+    cout << "\nArray sebelum diurutkan:\n";
+    for (int i = 0; i < baris; i++) {
+        for (int j = 0; j < kolom; j++) {
+            cout << array2D[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    // Konversi ke array 1 dimensi
+    int array1D[baris * kolom];
+    int index = 0;
+    for (int i = 0; i < baris; i++) {
+        for (int j = 0; j < kolom; j++) {
+            array1D[index++] = array2D[i][j];
+        }
+    }
+
+    // Bubble sort pada array 1 dimensi
+    for (int i = 0; i < baris * kolom - 1; i++) {
+        for (int j = 0; j < baris * kolom - i - 1; j++) {
+            if (array1D[j] > array1D[j + 1]) {
+                int temp = array1D[j];
+                array1D[j] = array1D[j + 1];
+                array1D[j + 1] = temp;
+            }
+        }
+    }
+
+    // Konversi kembali ke array 2 dimensi
+    index = 0;
+    for (int i = 0; i < baris; i++) {
+        for (int j = 0; j < kolom; j++) {
+            array2D[i][j] = array1D[index++];
+        }
+    }
+
+    // Tampilkan array setelah diurutkan
+    cout << "\nArray setelah diurutkan:\n";
+    for (int i = 0; i < baris; i++) {
+        for (int j = 0; j < kolom; j++) {
+            cout << array2D[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
