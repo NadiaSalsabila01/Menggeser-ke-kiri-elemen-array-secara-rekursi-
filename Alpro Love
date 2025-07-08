@@ -1,0 +1,129 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+using namespace std;
+
+// Struct data barang
+struct Barang {
+    string kode;
+    string nama;
+    double harga;
+};
+
+// Class manajemen barang
+class ManajemenBarang {
+private:
+    Barang daftar[100];
+    int jumlah;
+
+public:
+    ManajemenBarang() {
+        jumlah = 0;
+    }
+
+    // Membaca data dari file
+    void bacaDariFile(string namaFile) {
+        ifstream file(namaFile);
+        if (!file.is_open()) {
+            cout << "Gagal membuka file input!" << endl;
+            return;
+        }
+
+        while (file >> daftar[jumlah].kode >> daftar[jumlah].nama >> daftar[jumlah].harga) {
+            jumlah++;
+        }
+
+        file.close();
+        cout << "Berhasil membaca " << jumlah << " data dari file.\n";
+    }
+
+    // Menampilkan data
+    void tampilkanBarang() {
+        cout << left << setw(10) << "Kode"
+             << setw(20) << "Nama"
+             << setw(10) << "Harga" << endl;
+        cout << "---------------------------------------------\n";
+        for (int i = 0; i < jumlah; i++) {
+            cout << left << setw(10) << daftar[i].kode
+                 << setw(20) << daftar[i].nama
+                 << setw(10) << fixed << setprecision(2) << daftar[i].harga << endl;
+        }
+    }
+
+    // Sorting harga (Bubble Sort)
+    void urutkanHarga() {
+        for (int i = 0; i < jumlah - 1; i++) {
+            for (int j = 0; j < jumlah - i - 1; j++) {
+                if (daftar[j].harga > daftar[j + 1].harga) {
+                    swap(daftar[j], daftar[j + 1]);
+                }
+            }
+        }
+    }
+
+    // Searching berdasarkan nama (Linear Search)
+    int cariNama(string namaCari) {
+        for (int i = 0; i < jumlah; i++) {
+            if (daftar[i].nama == namaCari) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // Menyimpan hasil ke file
+    void simpanKeFile(string namaFile) {
+        ofstream file(namaFile);
+        if (!file.is_open()) {
+            cout << "Gagal menyimpan ke file output!" << endl;
+            return;
+        }
+
+        for (int i = 0; i < jumlah; i++) {
+            file << daftar[i].kode << " "
+                 << daftar[i].nama << " "
+                 << daftar[i].harga << endl;
+        }
+
+        file.close();
+        cout << "Data berhasil disimpan ke file: " << namaFile << endl;
+    }
+};
+
+int main() {
+    ManajemenBarang toko;
+
+    // 1. Baca dari file
+    toko.bacaDariFile("data_barang.txt");
+
+    // 2. Tampilkan sebelum diurutkan
+    cout << "\nData Sebelum Diurutkan:\n";
+    toko.tampilkanBarang();
+
+    // 3. Urutkan berdasarkan harga
+    toko.urutkanHarga();
+
+    // 4. Tampilkan setelah diurutkan
+    cout << "\nData Setelah Diurutkan Berdasarkan Harga:\n";
+    toko.tampilkanBarang();
+
+    // 5. Simpan ke file
+    toko.simpanKeFile("hasil_urut.txt");
+
+    // 6. Searching nama barang
+    string dicari;
+    cout << "\nMasukkan nama barang yang dicari: ";
+    cin >> dicari;
+
+    int hasil = toko.cariNama(dicari);
+    if (hasil != -1) {
+        cout << "Barang ditemukan!\n";
+        cout << "Kode  : " << toko.kodeBarang(hasil) << endl;
+        cout << "Nama  : " << toko.namaBarang(hasil) << endl;
+        cout << "Harga : " << toko.hargaBarang(hasil) << endl;
+    } else {
+        cout << "Barang tidak ditemukan!\n";
+    }
+
+    return 0;
+}
