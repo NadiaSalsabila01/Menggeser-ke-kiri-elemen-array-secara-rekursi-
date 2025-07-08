@@ -1,0 +1,25 @@
+#include <iostream>
+#include <fstream>      // Untuk ifstream
+#include <string>       // Untuk string
+
+using namespace std;
+
+int main() {
+    ifstream file("data.txt"); // Membuka file untuk dibaca
+
+    if (!file) {
+        cerr << "Gagal membuka file!" << endl;
+        return 1;
+    }
+
+    string nama;
+    int umur;
+
+    // Membaca isi file baris per baris
+    while (file >> nama >> umur) {
+        cout << "Nama: " << nama << ", Umur: " << umur << endl;
+    }
+
+    file.close(); // Menutup file
+    return 0;
+}
