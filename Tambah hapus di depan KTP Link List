@@ -1,0 +1,123 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// =============================
+// STRUKTUR NODE DATA KTP
+// =============================
+struct KTP {
+    string nik;
+    string nama;
+    string alamat;
+    string jenisKelamin;
+    int umur;
+    KTP* next;
+};
+
+// Pointer global ke head
+KTP* head = nullptr;
+
+// =============================
+// FUNGSI TAMBAH DI DEPAN
+// =============================
+void tambahDepan(string nik, string nama, string alamat, string jk, int umur) {
+    KTP* baru = new KTP;
+    baru->nik = nik;
+    baru->nama = nama;
+    baru->alamat = alamat;
+    baru->jenisKelamin = jk;
+    baru->umur = umur;
+    baru->next = head;  // node baru menunjuk ke head lama
+    head = baru;        // ubah head menjadi node baru
+
+    cout << "\nData berhasil ditambahkan di depan.\n";
+}
+
+// =============================
+// FUNGSI HAPUS DI DEPAN
+// =============================
+void hapusDepan() {
+    if (head == nullptr) {
+        cout << "Data masih kosong, tidak bisa menghapus.\n";
+        return;
+    }
+
+    KTP* hapus = head;
+    head = head->next;  // pindahkan head ke node berikutnya
+
+    cout << "\nData dengan NIK " << hapus->nik << " dihapus dari depan.\n";
+    delete hapus;
+}
+
+// =============================
+// FUNGSI TAMPILKAN DATA
+// =============================
+void tampilkanData() {
+    if (head == nullptr) {
+        cout << "Data KTP masih kosong.\n";
+        return;
+    }
+
+    cout << "\n=== DAFTAR DATA KTP ===\n";
+    KTP* bantu = head;
+    while (bantu != nullptr) {
+        cout << "NIK           : " << bantu->nik << endl;
+        cout << "Nama          : " << bantu->nama << endl;
+        cout << "Alamat        : " << bantu->alamat << endl;
+        cout << "Jenis Kelamin : " << bantu->jenisKelamin << endl;
+        cout << "Umur          : " << bantu->umur << endl;
+        cout << "-----------------------------\n";
+        bantu = bantu->next;
+    }
+}
+
+// =============================
+// MENU UTAMA
+// =============================
+int main() {
+    int pilih;
+    string nik, nama, alamat, jk;
+    int umur;
+
+    do {
+        cout << "\n==============================\n";
+        cout << "   PROGRAM DATA KTP (LINKED LIST)\n";
+        cout << "==============================\n";
+        cout << "1. Tambah Data di Depan\n";
+        cout << "2. Hapus Data di Depan\n";
+        cout << "3. Tampilkan Data\n";
+        cout << "4. Keluar\n";
+        cout << "Pilih menu: ";
+        cin >> pilih;
+        cin.ignore();
+
+        switch (pilih) {
+            case 1:
+                cout << "\nMasukkan NIK           : "; getline(cin, nik);
+                cout << "Masukkan Nama          : "; getline(cin, nama);
+                cout << "Masukkan Alamat        : "; getline(cin, alamat);
+                cout << "Masukkan Jenis Kelamin : "; getline(cin, jk);
+                cout << "Masukkan Umur          : "; cin >> umur; cin.ignore();
+                tambahDepan(nik, nama, alamat, jk, umur);
+                break;
+
+            case 2:
+                hapusDepan();
+                break;
+
+            case 3:
+                tampilkanData();
+                break;
+
+            case 4:
+                cout << "Keluar dari program.\n";
+                break;
+
+            default:
+                cout << "Pilihan tidak valid!\n";
+        }
+
+    } while (pilih != 4);
+
+    return 0;
+}
