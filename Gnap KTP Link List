@@ -1,0 +1,89 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+// ======================= STRUKTUR NODE =======================
+struct KTP {
+    string nik;
+    string nama;
+    string alamat;
+    string jenisKelamin;
+    int umur;
+    KTP* next;
+};
+
+// Pointer head dan tail
+KTP* head = nullptr;
+KTP* tail = nullptr;
+
+// ======================= TAMBAH DI BELAKANG =======================
+void tambahBelakang(string nik, string nama, string alamat, string jk, int umur) {
+    KTP* baru = new KTP;
+    baru->nik = nik;
+    baru->nama = nama;
+    baru->alamat = alamat;
+    baru->jenisKelamin = jk;
+    baru->umur = umur;
+    baru->next = nullptr;
+
+    // Jika list masih kosong
+    if (head == nullptr) {
+        head = tail = baru;
+    } else {
+        tail->next = baru;
+        tail = baru;
+    }
+}
+
+// ======================= TAMPILKAN DATA =======================
+void tampilkanData() {
+    if (head == nullptr) {
+        cout << "Data KTP masih kosong.\n";
+        return;
+    }
+
+    cout << "=== DAFTAR DATA KTP ===\n";
+    KTP* bantu = head;
+    while (bantu != nullptr) {
+        cout << "NIK           : " << bantu->nik << endl;
+        cout << "Nama          : " << bantu->nama << endl;
+        cout << "Alamat        : " << bantu->alamat << endl;
+        cout << "Jenis Kelamin : " << bantu->jenisKelamin << endl;
+        cout << "Umur          : " << bantu->umur << endl;
+        cout << "---------------------------\n";
+        bantu = bantu->next;
+    }
+}
+
+// ======================= BACA FILE =======================
+void bacaFile(const string& namaFile) {
+    ifstream file(namaFile);
+    if (!file.is_open()) {
+        cout << "Gagal membuka file: " << namaFile << endl;
+        return;
+    }
+
+    string nik, nama, alamat, jk;
+    int umur;
+
+    // Baca data dari file dan simpan ke linked list
+    while (file >> nik >> nama >> alamat >> jk >> umur) {
+        tambahBelakang(nik, nama, alamat, jk, umur);
+    }
+
+    file.close();
+}
+
+// ======================= MAIN PROGRAM =======================
+int main() {
+    string namaFile = "dataKTP.txt";
+
+    cout << "Membaca data dari file...\n";
+    bacaFile(namaFile);
+
+    cout << "\nMenampilkan data yang tersimpan di Linked List:\n";
+    tampilkanData();
+
+    return 0;
+}
