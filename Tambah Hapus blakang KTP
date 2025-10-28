@@ -1,0 +1,143 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// =============================
+// STRUKTUR NODE DATA KTP
+// =============================
+struct KTP {
+    string nik;
+    string nama;
+    string alamat;
+    string jenisKelamin;
+    int umur;
+    KTP* next;
+};
+
+// Pointer global untuk head dan tail
+KTP* head = nullptr;
+KTP* tail = nullptr;
+
+// =============================
+// FUNGSI TAMBAH DI BELAKANG
+// =============================
+void tambahBelakang(string nik, string nama, string alamat, string jk, int umur) {
+    KTP* baru = new KTP;
+    baru->nik = nik;
+    baru->nama = nama;
+    baru->alamat = alamat;
+    baru->jenisKelamin = jk;
+    baru->umur = umur;
+    baru->next = nullptr;
+
+    if (head == nullptr) { // Jika list kosong
+        head = tail = baru;
+    } else {
+        tail->next = baru;
+        tail = baru;
+    }
+
+    cout << "\nData berhasil ditambahkan di belakang.\n";
+}
+
+// =============================
+// FUNGSI HAPUS DI BELAKANG
+// =============================
+void hapusBelakang() {
+    if (head == nullptr) {
+        cout << "Data masih kosong, tidak bisa menghapus.\n";
+        return;
+    }
+
+    // Jika hanya ada satu node
+    if (head == tail) {
+        cout << "\nData dengan NIK " << head->nik << " dihapus.\n";
+        delete head;
+        head = tail = nullptr;
+        return;
+    }
+
+    // Jika lebih dari satu node
+    KTP* bantu = head;
+    while (bantu->next != tail) {
+        bantu = bantu->next;
+    }
+
+    cout << "\nData dengan NIK " << tail->nik << " dihapus.\n";
+    delete tail;
+    tail = bantu;
+    tail->next = nullptr;
+}
+
+// =============================
+// FUNGSI TAMPILKAN SEMUA DATA
+// =============================
+void tampilkanData() {
+    if (head == nullptr) {
+        cout << "Data KTP masih kosong.\n";
+        return;
+    }
+
+    cout << "\n=== DAFTAR DATA KTP ===\n";
+    KTP* bantu = head;
+    while (bantu != nullptr) {
+        cout << "NIK           : " << bantu->nik << endl;
+        cout << "Nama          : " << bantu->nama << endl;
+        cout << "Alamat        : " << bantu->alamat << endl;
+        cout << "Jenis Kelamin : " << bantu->jenisKelamin << endl;
+        cout << "Umur          : " << bantu->umur << endl;
+        cout << "-----------------------------\n";
+        bantu = bantu->next;
+    }
+}
+
+// =============================
+// MENU UTAMA
+// =============================
+int main() {
+    int pilih;
+    string nik, nama, alamat, jk;
+    int umur;
+
+    do {
+        cout << "\n==============================\n";
+        cout << "   PROGRAM DATA KTP (LINKED LIST)\n";
+        cout << "==============================\n";
+        cout << "1. Tambah Data di Belakang\n";
+        cout << "2. Hapus Data di Belakang\n";
+        cout << "3. Tampilkan Data\n";
+        cout << "4. Keluar\n";
+        cout << "Pilih menu: ";
+        cin >> pilih;
+        cin.ignore();
+
+        switch (pilih) {
+            case 1:
+                cout << "\nMasukkan NIK           : "; getline(cin, nik);
+                cout << "Masukkan Nama          : "; getline(cin, nama);
+                cout << "Masukkan Alamat        : "; getline(cin, alamat);
+                cout << "Masukkan Jenis Kelamin : "; getline(cin, jk);
+                cout << "Masukkan Umur          : "; cin >> umur; cin.ignore();
+                tambahBelakang(nik, nama, alamat, jk, umur);
+                break;
+
+            case 2:
+                hapusBelakang();
+                break;
+
+            case 3:
+                tampilkanData();
+                break;
+
+            case 4:
+                cout << "Keluar dari program.\n";
+                break;
+
+            default:
+                cout << "Pilihan tidak valid!\n";
+        }
+
+    } while (pilih != 4);
+
+    return 0;
+}
