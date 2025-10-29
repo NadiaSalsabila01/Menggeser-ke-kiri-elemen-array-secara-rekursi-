@@ -1,0 +1,54 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("=== PROGRAM HEWAN ===");
+        System.out.println("1. Ayam");
+        System.out.println("2. Kucing");
+        System.out.print("Masukkan Pilihan (1/2) : ");
+        int pilihan = input.nextInt();
+        input.nextLine(); // buang newline
+
+        if (pilihan == 1) {
+            // === AYAM ===
+            Ayam ayam = new Ayam();
+
+            System.out.print("Masukkan Jenis Ayam : ");
+            String jenis = input.nextLine();
+            ayam.setJenis(jenis);
+
+            System.out.print("Masukkan Jumlah Kaki Ayam : ");
+            int kaki = input.nextInt();
+            ayam.setKaki(kaki);
+
+            System.out.println("\n=== DATA AYAM ===");
+            System.out.println("Jenis Ayam : " + ayam.getJenis());
+            System.out.println("Jumlah Kaki Ayam : " + ayam.getKaki());
+            ayam.bersuara();
+
+        } else if (pilihan == 2) {
+            // === KUCING ===
+            Kucing kucing = new Kucing();
+
+            System.out.print("Masukkan Jenis Kucing : ");
+            String jenis = input.nextLine();
+            kucing.setJenis(jenis);
+
+            System.out.print("Masukkan Jumlah Kaki Kucing : ");
+            int kaki = input.nextInt();
+            kucing.setKaki(kaki);
+
+            System.out.println("\n=== DATA KUCING ===");
+            System.out.println("Jenis Kucing : " + kucing.getJenis());
+            System.out.println("Jumlah Kaki Kucing : " + kucing.getKaki());
+            kucing.bersuara();
+
+        } else {
+            System.out.println("Pilihan tidak valid!");
+        }
+
+        input.close();
+    }
+}
