@@ -1,0 +1,223 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    string nik;
+    string nama;
+    string alamat;
+    Node* next;
+};
+
+// Pointer head untuk awal Linked List
+Node* head = nullptr;
+
+// Fungsi untuk menambahkan data KTP
+void tambahData() {
+    Node* newNode = new Node;
+    cout << "\n=== Tambah Data KTP ===" << endl;
+    cout << "Masukkan NIK            : ";
+    getline(cin, newNode->nik);
+    cout << "Masukkan Nama           : ";
+    getline(cin, newNode->nama);
+    cout << "Masukkan Alamat         : ";
+    getline(cin, newNode->alamat);
+
+    newNode->next = nullptr;
+
+    if (head == nullptr) {
+        head = newNode;
+    } else {
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+
+    cout << "Data berhasil ditambahkan!\n";
+}
+
+// Fungsi untuk menampilkan semua data KTP
+void tampilData() {
+    if (head == nullptr) {
+        cout << "\nData masih kosong.\n";
+        return;
+    }
+
+    cout << "\n=== Daftar Data KTP ===\n";
+    Node* temp = head;
+    int i = 1;
+    while (temp != nullptr) {
+        cout << "\nData ke-" << i++ << endl;
+        cout << "NIK     : " << temp->nik << endl;
+        cout << "Nama    : " << temp->nama << endl;
+        cout << "Alamat  : " << temp->alamat << endl;
+        temp = temp->next;
+    }
+}
+
+// Fungsi untuk menghapus data berdasarkan NIK
+void hapusData() {
+    if (head == nullptr) {
+        cout << "\nData masih kosong.\n";
+        return;
+    }
+
+    string nikHapus;
+    cout << "\nMasukkan NIK yang ingin dihapus: ";
+    getline(cin, nikHapus);
+
+    Node* temp = head;
+    Node* prev = nullptr;
+
+    while (temp != nullptr && temp->nik != nikHapus) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == nullptr) {
+        cout << "Data dengan NIK " << nikHapus << " tidak ditemukan.\n";
+        return;
+    }
+
+    if (prev == nullptr) {
+        head = temp->next;
+    } else {
+        prev->next = temp->next;
+    }
+
+    delete temp;
+    cout << "Data berhasil dihapus.\n";
+}
+
+// ==================== TAMBAHAN: DOUBLE LINKED LIST ====================
+
+// Struktur node double linked list
+struct DNode {
+    string nik;
+    string nama;
+    string alamat;
+    DNode* next;
+    DNode* prev;
+};
+
+// Pointer head dan tail untuk double linked list
+DNode* headD = nullptr;
+DNode* tailD = nullptr;
+
+// Fungsi menambah data ke double linked list
+void tambahDataDouble() {
+    DNode* newNode = new DNode;
+    cout << "\n=== Tambah Data KTP (Double Linked List) ===" << endl;
+    cout << "Masukkan NIK            : ";
+    getline(cin, newNode->nik);
+    cout << "Masukkan Nama           : ";
+    getline(cin, newNode->nama);
+    cout << "Masukkan Alamat         : ";
+    getline(cin, newNode->alamat);
+
+    newNode->next = nullptr;
+    newNode->prev = nullptr;
+
+    if (headD == nullptr) {
+        headD = tailD = newNode;
+    } else {
+        tailD->next = newNode;
+        newNode->prev = tailD;
+        tailD = newNode;
+    }
+
+    cout << "Data berhasil ditambahkan ke double linked list!\n";
+}
+
+// Fungsi menampilkan data dari depan
+void tampilDataDoubleDariDepan() {
+    if (headD == nullptr) {
+        cout << "\nData masih kosong (Double Linked List).\n";
+        return;
+    }
+    cout << "\n=== Daftar Data KTP (Dari Depan) ===\n";
+    DNode* temp = headD;
+    int i = 1;
+    while (temp != nullptr) {
+        cout << "\nData ke-" << i++ << endl;
+        cout << "NIK     : " << temp->nik << endl;
+        cout << "Nama    : " << temp->nama << endl;
+        cout << "Alamat  : " << temp->alamat << endl;
+        temp = temp->next;
+    }
+}
+
+// Fungsi menampilkan data dari belakang
+void tampilDataDoubleDariBelakang() {
+    if (tailD == nullptr) {
+        cout << "\nData masih kosong (Double Linked List).\n";
+        return;
+    }
+    cout << "\n=== Daftar Data KTP (Dari Belakang) ===\n";
+    DNode* temp = tailD;
+    int i = 1;
+    while (temp != nullptr) {
+        cout << "\nData ke-" << i++ << endl;
+        cout << "NIK     : " << temp->nik << endl;
+        cout << "Nama    : " << temp->nama << endl;
+        cout << "Alamat  : " << temp->alamat << endl;
+        temp = temp->prev;
+    }
+}
+
+// Fungsi menghapus data berdasarkan NIK
+void hapusDataDouble() {
+    if (headD == nullptr) {
+        cout << "\nData masih kosong (Double Linked List).\n";
+        return;
+    }
+
+    string nikHapus;
+    cout << "\nMasukkan NIK yang ingin dihapus: ";
+    getline(cin, nikHapus);
+
+    DNode* temp = headD;
+    while (temp != nullptr && temp->nik != nikHapus) {
+        temp = temp->next;
+    }
+
+    if (temp == nullptr) {
+        cout << "Data tidak ditemukan.\n";
+        return;
+    }
+
+    if (temp == headD) headD = temp->next;
+    if (temp == tailD) tailD = temp->prev;
+    if (temp->next != nullptr) temp->next->prev = temp->prev;
+    if (temp->prev != nullptr) temp->prev->next = temp->next;
+
+    delete temp;
+    cout << "Data berhasil dihapus dari double linked list!\n";
+}
+
+// ==================== MENU TAMBAHAN ====================
+void menuDoubleLinkedList() {
+    int pilih;
+    do {
+        cout << "\n===== MENU DOUBLE LINKED LIST =====" << endl;
+        cout << "1. Tambah Data" << endl;
+        cout << "2. Tampil Dari Depan" << endl;
+        cout << "3. Tampil Dari Belakang" << endl;
+        cout << "4. Hapus Data" << endl;
+        cout << "5. Kembali ke Menu Utama" << endl;
+        cout << "Pilih: ";
+        cin >> pilih;
+        cin.ignore();
+        switch (pilih) {
+            case 1: tambahDataDouble(); break;
+            case 2: tampilDataDoubleDariDepan(); break;
+            case 3: tampilDataDoubleDariBelakang(); break;
+            case 4: hapusDataDouble(); break;
+            case 5: cout << "Kembali ke menu utama.\n"; break;
+            default: cout << "Pilihan tidak valid!\n";
+        }
+    } while (pilih != 5);
+    return 0;
+}
