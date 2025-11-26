@@ -1,0 +1,93 @@
+#include <iostream>
+using namespace std;
+
+struct Mahasiswa {
+    string nama;
+    string nim;
+    float ipk;
+};
+
+Mahasiswa stackArr[5];   // ukuran stack = 5
+int top = -1;
+int h = 0;
+int tamp;
+
+// PUSH
+void push(Mahasiswa mhs) {
+    if (top == 4) {   // batas array
+        cout << "Stack penuh!\n";
+    } else {
+        top++;
+        stackArr[top] = mhs;
+        cout << "Data mahasiswa berhasil ditambahkan.\n";
+    }
+}
+
+// POP
+void pop() {
+    if (top == -1) {
+        cout << "Stack kosong!\n";
+    } else {
+        cout << "Data " << stackArr[top].nama << " dihapus dari stack.\n";
+        top--;
+        h++;
+    }
+}
+
+// DISPLAY
+void display() {
+    if (top == -1) {
+        cout << "Stack kosong!\n";
+        return;
+    }
+
+	tamp = top;
+    cout << "\n=== Isi Stack ===\n";
+    for (top; top >= 0; top--) {
+    	cout << "Posisi : " << top+1 << endl;
+        cout << "Nama : " << stackArr[top].nama << endl;
+        cout << "NIM  : " << stackArr[top].nim << endl;
+        cout << "IPK  : " << stackArr[top].ipk << endl;
+        cout << "------------------------\n";
+    }
+    top = tamp;
+}
+
+int main() {
+    Mahasiswa m;
+    int pilih;
+
+    do{
+    	cout << "===== DATA MAHASISWA =====" << endl;
+		cout << "1. Tambah Mahasiswa\n";
+		cout << "2. Hapus Mahasiswa\n";
+		cout << "3. Tampilkan Mahasiswa\n";
+		cout << "4. Keluar\n";
+		cout << "Masukkan pilihan :";
+    	cin >> pilih;
+    	
+    	switch(pilih){
+    		case 1 :
+    			cout<<"Nama Mahasiswa : ";
+    			cin>>m.nama;
+    			cout<<"NIM Mahasiswa : ";
+    			cin>>m.nim;
+    			cout<<"IPK Mahasiswa : ";
+    			cin>>m.ipk;
+			    push(m);
+			    break;
+			case 2:
+				pop();
+				break;
+			case 3:
+				system("cls");
+				display();
+				break;
+			default:
+				break;
+		}
+	}while (pilih != 4);
+	cout<<"Yey selesai";
+
+    return 0;
+}
