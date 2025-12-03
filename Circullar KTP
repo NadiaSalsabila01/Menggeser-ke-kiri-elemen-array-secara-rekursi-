@@ -1,0 +1,209 @@
+#include <iostream>
+#include <string>
+#include <algorithm> 
+#include <vector>    
+
+using namespace std;
+struct DataKTP {
+    string NIK;
+    string Nama;
+    string Alamat;
+};
+struct Node {
+    DataKTP data;
+    Node* next;
+    Node(DataKTP d) : data(d), next(NULL) {}
+};
+bool compareKTP(const DataKTP& a, const DataKTP& b) {
+    return a.NIK < b.NIK;
+}
+class SistemKTP {
+private:
+    Node* head;
+    void sortAndDisplay() {
+        if (!head) {
+            cout << "Daftar KTP kosong.\n";
+            return;
+        }
+
+        vector<DataKTP> dataList;
+        Node* current = head;
+        do {
+            dataList.push_back(current->data);
+            current = current->next;
+        } while (current != head);
+        sort(dataList.begin(), dataList.end(), compareKTP);
+        cout << "\n--- ?? Daftar Seluruh Data KTP (Urut NIK) ---\n";
+        for (int i = 0; i < dataList.size(); ++i) {
+            cout << "NIK: " << dataList[i].NIK << ", Nama: " << dataList[i].Nama << ", Alamat: " << dataList[i].Alamat << "\n";
+        }
+        cout << "----------------------------------------------------------\n";
+    }
+public:
+    SistemKTP() : head(NULL) {}
+    ~SistemKTP() {
+        if (!head) return;
+        Node* current = head->next;
+        while (current != head) {
+            Node* temp = current;
+            current = current->next;
+            delete temp;
+        }
+        delete head;
+        head = NULL;
+    }
+    void tambahKTP(DataKTP dataBaru) {
+        Node* newNode = new Node(dataBaru);
+        if (!head) {
+            head = newNode;
+            head->next = head;
+            cout << "? Data KTP pertama ditambahkan.\n";
+            return;
+        }
+        Node* current = head;
+        while (current->next != head) {
+            current = current->next;
+        }
+        current->next = newNode;
+        newNode->next = head;
+        cout << "? Data KTP NIK " << dataBaru.NIK << " berhasil ditambahkan.\n";
+    }
+    void hapusKTP(string targetNIK) {
+        if (!head) {
+            cout << "? Daftar KTP kosong.\n";
+            return;
+        }
+
+        Node* current = head;
+        Node* prev = NULL;
+        bool found = false;
+
+        do {
+            if (current->data.NIK == targetNIK) {
+                found = true;
+                break;
+            }
+            prev = current;
+            current = current->next;
+        } while (current != head);
+
+        if (!found) {
+            cout << "? Data KTP NIK " << targetNIK << " tidak ditemukan.\n";
+            return;
+        }
+
+        if (current == head) {
+            if (head->next == head) { 
+                delete head; head = NULL;
+                cout << "? Data KTP NIK " << targetNIK << " berhasil dihapus. Daftar kosong.\n";
+                return;
+            }
+            Node* last = head;
+            while (last->next != head) {
+                last = last->next;
+            }
+            head = head->next; 
+            last->next = head; 
+            delete current;
+            cout << "? Data KTP NIK " << targetNIK << " (Head) berhasil dihapus.\n";
+            return;
+        }
+
+        prev->next = current->next;
+        delete current;
+        cout << "? Data KTP NIK " << targetNIK << " berhasil dihapus.\n";
+    }
+    void cariKTP(string targetNIK) {
+        if (!head) {
+            cout << "? Daftar KTP kosong.\n";
+            return;
+        }
+
+        Node* current = head;
+        do {
+            if (current->data.NIK == targetNIK) {
+                cout << "\n--- ?? Data Ditemukan ---\n";
+                cout << "NIK: " << current->data.NIK << ", Nama: " << current->data.Nama << ", Alamat: " << current->data.Alamat << "\n";
+                return;
+            }
+            current = current->next;
+        } while (current != head);
+
+        cout << "? Data KTP NIK " << targetNIK << " tidak ditemukan.\n";
+    }
+
+    void tampilkanUrut() {
+        sortAndDisplay();
+    }
+};
+void tampilkanMenu() {
+    cout << "\n======================================================\n";
+    cout << "  SISTEM MANAJEMEN KTP (CIRCULAR LINKED LIST)\n";
+    cout << "======================================================\n";
+    cout << "1. Tambah Data KTP\n";
+    cout << "2. Hapus Data KTP (berdasarkan NIK)\n";
+    cout << "3. Cari Data KTP (berdasarkan NIK)\n";
+    cout << "4. Tampilkan Semua Data KTP (Urut NIK)\n";
+    cout << "5. Keluar\n";
+    cout << "Pilih Opsi: ";
+}
+void inputDataKTP(SistemKTP& sistem) {
+    DataKTP d;
+    cout << "\n--- Masukkan Data KTP Baru ---\n";
+    cout << "NIK (Contoh: 32xxxxxxxxxxxxxx): ";
+    cin >> d.NIK; 
+    cin.ignore(1000, '\n'); 
+    cout << "Nama: ";
+    getline(cin, d.Nama);
+    cout << "Alamat: ";
+    getline(cin, d.Alamat);
+    
+    sistem.tambahKTP(d);
+}
+void hapusDataKTP(SistemKTP& sistem) {
+    string nik;
+    cout << "\n--- Hapus Data KTP ---\n";
+    cout << "Masukkan NIK yang ingin dihapus: ";
+    cin >> nik;
+    sistem.hapusKTP(nik);
+}
+void cariDataKTP(SistemKTP& sistem) {
+    string nik;
+    cout << "\n--- Cari Data KTP ---\n";
+    cout << "Masukkan NIK yang ingin dicari: ";
+    cin >> nik;
+    sistem.cariKTP(nik);
+}
+int main() {
+    SistemKTP sistem;
+    int pilihan;
+    do {
+        tampilkanMenu();
+        if (!(cin >> pilihan)) {
+            cout << "Input tidak valid. Silakan masukkan angka.\n";
+            cin.clear();
+            cin.ignore(10000, '\n');
+            continue;
+        }
+        switch (pilihan) {
+            case 1:
+                inputDataKTP(sistem);
+                break;
+            case 2:
+                hapusDataKTP(sistem);
+                break;
+            case 3:
+                cariDataKTP(sistem);
+                break;
+            case 4:
+                sistem.tampilkanUrut();
+                break;
+            case 5:
+                cout << "\nTerima kasih. Program selesai.\n";
+                break;
+            default:
+                cout << "Opsi tidak valid.\n";
+        }
+    } while (pilihan != 5);
+    return 0;
+}
