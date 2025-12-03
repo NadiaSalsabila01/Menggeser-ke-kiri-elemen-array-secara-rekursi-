@@ -1,0 +1,99 @@
+#include<iostream>
+#define maks 3
+using namespace std;
+
+class Queue{
+private:
+    // static const int maks = 3;   //Jumlah maksimal Item/Element  <-- Pakai kalau tidak pakai "#define maks3"
+    //DEPAN, BANYAK, BELAKANG = 0  
+    int depan = 0;
+    int banyak = 0;
+    int belakang = 0;
+
+    char A[maks];
+public:
+    Queue(){    //Inisialisasi awal Semua element adalah kosong
+        banyak = 0;
+        for (int i = 0; i < maks; i++){
+            A[i] = ' ';
+        }
+    }
+
+    bool kosong(){
+        return banyak == 0;   //Jika antrian kosong = true
+
+    }
+
+    bool penuh(){
+            return banyak == maks; //Jika antrian penuh = true
+    }
+
+    void enqueue(char x){
+        if (penuh()){
+            cout<<"Enq" <<" [Penuh]";
+        }else{            
+            cout<<"Enq --> "<< x <<"  ";
+            A[belakang] = x;
+            belakang = (belakang + 1) % maks;
+            banyak++;
+        }
+        cetak();
+    }
+
+    void dequeue(){
+        if (kosong()){
+            cout<<"Deq[Kosong]";
+        }else{
+            cout<<"Deq --> "<<A[depan]<<"  ";
+            A[depan] = ' ';
+            depan = (depan + 1) % maks;
+            banyak--;
+        }
+        cetak();
+
+    }
+
+    void cetak(){
+        // cout<<"\t: ";
+        cout<<": ";
+        for (int i = 0; i < maks; i++){
+            cout<<"["<< A[i] << "]";
+        }
+        //[depan] dan [belakang] di tambah 1 agar enak saat di presentasikan
+        cout<<", Depan = "<< depan+1 <<", Belakang = "<< belakang+1 <<", Banyak = "<< banyak <<endl;
+    }
+};
+
+
+int main(){
+    Queue queue;
+
+    queue.dequeue();
+    queue.enqueue('A');
+    queue.enqueue('B');
+    queue.enqueue('C');
+    queue.enqueue('D');
+    queue.dequeue();
+    queue.dequeue();
+    queue.dequeue();
+
+    queue.dequeue();
+    cout<<endl;
+
+    //Proses Enquque kalau 'depan' di index 2 [1][2][3]
+    queue.enqueue('A');
+    queue.dequeue();
+    queue.enqueue('B'); // <-- Bahas dari sini
+    queue.enqueue('C');
+    queue.enqueue('D');
+    cout<<endl;
+
+    //Proses Dequeue kalau 'belakang' di index 2 [1][2][3]
+    queue.dequeue();
+    queue.dequeue();
+    queue.dequeue();
+    cout<<endl;
+
+    queue.dequeue();
+    return 0;
+}
