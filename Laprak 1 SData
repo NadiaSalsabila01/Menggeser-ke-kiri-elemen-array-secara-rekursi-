@@ -1,0 +1,91 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* prev;
+    Node* next;
+
+    Node(int value) {
+        data = value;
+        prev = nullptr;
+        next = nullptr;
+    }
+};
+
+class DoublyLinkedList {
+private:
+    Node* head;
+    Node* tail;
+
+public:
+    DoublyLinkedList() {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    // Menambah data di belakang
+    void addBack(int value) {
+        Node* baru = new Node(value);
+        if (head == nullptr) {
+            head = tail = baru;
+        } else {
+            tail->next = baru;
+            baru->prev = tail;
+            tail = baru;
+        }
+    }
+
+    // Hapus elemen paling depan
+    void deleteFront() {
+        if (head == nullptr) {
+            cout << "List kosong!" << endl;
+            return;
+        }
+
+        Node* hapus = head;
+        if (head == tail) {
+            head = tail = nullptr;
+        } else {
+            head = head->next;
+            head->prev = nullptr;
+        }
+        delete hapus;
+    }
+
+    // Menampilkan seluruh elemen
+    void display() {
+        Node* temp = head;
+        while (temp != nullptr) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    DoublyLinkedList D;
+
+    // Data awal: 2, 5, 8, 9
+    D.addBack(2);
+    D.addBack(5);
+    D.addBack(8);
+    D.addBack(9);
+
+    cout << "Isi awal list: ";
+    D.display();
+
+    // Hapus elemen paling depan
+    D.deleteFront();
+    cout << "Setelah hapus depan: ";
+    D.display();
+
+    // Tambah elemen 10
+    D.addBack(10);
+    cout << "Setelah tambah 10: ";
+    D.display();
+
+    return 0;
+}
