@@ -1,0 +1,111 @@
+Buatlah program C++ yang dapat:
+
+Menambahkan data nasabah ke dalam antrian circular linked list
+
+Menampilkan seluruh antrian
+
+Menghitung jumlah nasabah menggunakan fungsi rekursif
+
+#include <iostream>
+using namespace std;
+
+// ================== CLASS NASABAH ==================
+class Nasabah {
+public:
+    int nomor;
+    string nama;
+
+    Nasabah(int n, string nm) {
+        nomor = n;
+        nama = nm;
+    }
+};
+
+// ================== NODE CIRCULAR LINKED LIST ==================
+class Node {
+public:
+    Nasabah data;
+    Node* next;
+
+    Node(Nasabah n) : data(n) {
+        next = NULL;
+    }
+};
+
+// ================== CLASS ANTRIAN ==================
+class Antrian {
+private:
+    Node* head;
+
+    // ===== FUNGSI REKURSIF =====
+    int hitungNasabah(Node* node, Node* start) {
+        if (node == NULL)
+            return 0;
+
+        if (node->next == start)
+            return 1;
+
+        return 1 + hitungNasabah(node->next, start);
+    }
+
+public:
+    Antrian() {
+        head = NULL;
+    }
+
+    // ===== TAMBAH NASABAH =====
+    void tambahNasabah(int nomor, string nama) {
+        Node* baru = new Node(Nasabah(nomor, nama));
+
+        if (head == NULL) {
+            head = baru;
+            head->next = head;
+        } else {
+            Node* temp = head;
+            while (temp->next != head) {
+                temp = temp->next;
+            }
+            temp->next = baru;
+            baru->next = head;
+        }
+    }
+
+    // ===== TAMPILKAN ANTRIAN =====
+    void tampilkan() {
+        if (head == NULL) {
+            cout << "Antrian kosong.\n";
+            return;
+        }
+
+        Node* temp = head;
+        do {
+            cout << "No: " << temp->data.nomor
+                 << " | Nama: " << temp->data.nama << endl;
+            temp = temp->next;
+        } while (temp != head);
+    }
+
+    // ===== HITUNG TOTAL NASABAH =====
+    int totalNasabah() {
+        if (head == NULL)
+            return 0;
+        return hitungNasabah(head, head);
+    }
+};
+
+// ================== MAIN ==================
+int main() {
+    Antrian bank;
+
+    bank.tambahNasabah(1, "Andi");
+    bank.tambahNasabah(2, "Budi");
+    bank.tambahNasabah(3, "Citra");
+
+    cout << "=== DAFTAR ANTRIAN BANK ===\n";
+    bank.tampilkan();
+
+    cout << "\nTotal Nasabah: "
+         << bank.totalNasabah() << endl;
+
+    return 0;
+}
