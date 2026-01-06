@@ -1,0 +1,101 @@
+Buatlah program C++ yang dapat:
+
+Menyimpan perintah ke dalam stack
+
+Melakukan UNDO (pop)
+
+Menampilkan seluruh riwayat perintah menggunakan fungsi rekursif
+
+#include <iostream>
+using namespace std;
+
+// ================== CLASS PERINTAH ==================
+class Perintah {
+public:
+    string aksi;
+
+    Perintah(string a = "") {
+        aksi = a;
+    }
+};
+
+// ================== CLASS STACK ==================
+class Stack {
+private:
+    int top;
+    int max;
+    Perintah* data;
+
+    // ===== FUNGSI REKURSIF =====
+    void tampilRekursif(int index) {
+        if (index < 0)
+            return;
+
+        tampilRekursif(index - 1);
+        cout << data[index].aksi << endl;
+    }
+
+public:
+    Stack(int ukuran) {
+        max = ukuran;
+        top = -1;
+        data = new Perintah[max];
+    }
+
+    ~Stack() {
+        delete[] data;
+    }
+
+    bool isEmpty() {
+        return top == -1;
+    }
+
+    bool isFull() {
+        return top == max - 1;
+    }
+
+    void push(Perintah p) {
+        if (isFull()) {
+            cout << "Stack penuh!\n";
+            return;
+        }
+        data[++top] = p;
+    }
+
+    void pop() {
+        if (isEmpty()) {
+            cout << "Stack kosong!\n";
+            return;
+        }
+        cout << "Undo perintah: " << data[top].aksi << endl;
+        top--;
+    }
+
+    void tampilkan() {
+        if (isEmpty()) {
+            cout << "Tidak ada perintah.\n";
+            return;
+        }
+        cout << "=== RIWAYAT PERINTAH ===\n";
+        tampilRekursif(top);
+    }
+};
+
+// ================== MAIN ==================
+int main() {
+    Stack undo(5);
+
+    undo.push(Perintah("Mengetik 'Halo'"));
+    undo.push(Perintah("Mengetik 'Dunia'"));
+    undo.push(Perintah("Menghapus kata"));
+
+    undo.tampilkan();
+
+    cout << endl;
+    undo.pop();
+
+    cout << "\nSetelah UNDO:\n";
+    undo.tampilkan();
+
+    return 0;
+}
