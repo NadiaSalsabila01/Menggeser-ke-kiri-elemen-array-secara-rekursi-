@@ -1,0 +1,111 @@
+Buatlah program C++ yang dapat:
+
+Menyimpan data transaksi menggunakan double linked list
+
+Menampilkan transaksi dari awal ke akhir
+
+Menghitung total harga semua transaksi menggunakan rekursi
+
+#include <iostream>
+using namespace std;
+
+// ================== CLASS TRANSAKSI ==================
+class Transaksi {
+public:
+    int id;
+    string namaBarang;
+    int jumlah;
+    int harga;
+
+    Transaksi(int i, string n, int j, int h) {
+        id = i;
+        namaBarang = n;
+        jumlah = j;
+        harga = h;
+    }
+
+    int totalHarga() {
+        return jumlah * harga;
+    }
+};
+
+// ================== NODE DOUBLE LINKED LIST ==================
+class Node {
+public:
+    Transaksi data;
+    Node* next;
+    Node* prev;
+
+    Node(Transaksi t) : data(t) {
+        next = NULL;
+        prev = NULL;
+    }
+};
+
+// ================== DOUBLE LINKED LIST ==================
+class DoubleLinkedList {
+private:
+    Node* head;
+    Node* tail;
+
+    // ====== FUNGSI REKURSIF ======
+    int hitungTotal(Node* node) {
+        if (node == NULL)
+            return 0;
+        return node->data.totalHarga() + hitungTotal(node->next);
+    }
+
+public:
+    DoubleLinkedList() {
+        head = NULL;
+        tail = NULL;
+    }
+
+    // ====== TAMBAH DATA ======
+    void tambahTransaksi(Transaksi t) {
+        Node* newNode = new Node(t);
+        if (head == NULL) {
+            head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            newNode->prev = tail;
+            tail = newNode;
+        }
+    }
+
+    // ====== TAMPILKAN DATA ======
+    void tampilkan() {
+        Node* temp = head;
+        while (temp != NULL) {
+            cout << "ID: " << temp->data.id << endl;
+            cout << "Barang: " << temp->data.namaBarang << endl;
+            cout << "Jumlah: " << temp->data.jumlah << endl;
+            cout << "Harga: " << temp->data.harga << endl;
+            cout << "Total: " << temp->data.totalHarga() << endl;
+            cout << "----------------------" << endl;
+            temp = temp->next;
+        }
+    }
+
+    // ====== TOTAL SEMUA TRANSAKSI (REKURSI) ======
+    int totalSemuaTransaksi() {
+        return hitungTotal(head);
+    }
+};
+
+// ================== MAIN ==================
+int main() {
+    DoubleLinkedList list;
+
+    list.tambahTransaksi(Transaksi(1, "Mie Instan", 3, 3000));
+    list.tambahTransaksi(Transaksi(2, "Susu", 2, 7000));
+    list.tambahTransaksi(Transaksi(3, "Roti", 5, 2500));
+
+    cout << "=== DAFTAR TRANSAKSI ===" << endl;
+    list.tampilkan();
+
+    cout << "Total Semua Transaksi: Rp "
+         << list.totalSemuaTransaksi() << endl;
+
+    return 0;
+}
