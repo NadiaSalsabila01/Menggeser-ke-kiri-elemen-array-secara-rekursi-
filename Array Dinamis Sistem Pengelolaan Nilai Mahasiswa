@@ -1,0 +1,70 @@
+Buatlah program C++ yang dapat:
+
+Menyimpan data mahasiswa dalam array dinamis
+
+Menampilkan data mahasiswa
+
+Menghitung total nilai mahasiswa menggunakan fungsi rekursif
+
+#include <iostream>
+using namespace std;
+
+// ================== CLASS MAHASISWA ==================
+class Mahasiswa {
+public:
+    string nim;
+    string nama;
+    int nilai;
+
+    void input() {
+        cout << "NIM   : ";
+        cin >> nim;
+        cin.ignore();
+        cout << "Nama  : ";
+        getline(cin, nama);
+        cout << "Nilai : ";
+        cin >> nilai;
+    }
+
+    void tampil() {
+        cout << nim << " | " << nama << " | " << nilai << endl;
+    }
+};
+
+// ================== FUNGSI REKURSIF ==================
+int hitungTotalNilai(Mahasiswa* mhs, int n) {
+    if (n == 0)
+        return 0;
+    return mhs[n - 1].nilai + hitungTotalNilai(mhs, n - 1);
+}
+
+// ================== MAIN ==================
+int main() {
+    int jumlah;
+    cout << "Masukkan jumlah mahasiswa: ";
+    cin >> jumlah;
+
+    // ===== ARRAY DINAMIS =====
+    Mahasiswa* data = new Mahasiswa[jumlah];
+
+    cout << "\nInput Data Mahasiswa\n";
+    for (int i = 0; i < jumlah; i++) {
+        cout << "\nMahasiswa ke-" << i + 1 << endl;
+        data[i].input();
+    }
+
+    cout << "\nDaftar Mahasiswa\n";
+    cout << "NIM | Nama | Nilai\n";
+    cout << "-----------------------\n";
+    for (int i = 0; i < jumlah; i++) {
+        data[i].tampil();
+    }
+
+    cout << "\nTotal Nilai Mahasiswa: "
+         << hitungTotalNilai(data, jumlah) << endl;
+
+    // ===== HAPUS ARRAY DINAMIS =====
+    delete[] data;
+
+    return 0;
+}
