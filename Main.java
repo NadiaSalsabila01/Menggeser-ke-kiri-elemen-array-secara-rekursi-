@@ -1,103 +1,121 @@
-// RESPONSI_123_Nadia Salsabila
-package majujayamotor;
-
+// RESPONSI PBO_KODE SOAL_XXX_NIM_NamaLengkap
 import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-    static ArrayList<Kendaraan> data = new ArrayList<>();
-    static Scanner sc = new Scanner(System.in);
-
     public static void main(String[] args) {
-        int menu;
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Buku> daftarBuku = new ArrayList<>();
+        boolean lanjut = true;
 
-        do {
-            System.out.println("\n=================================");
-            System.out.println("  SHOWROOM MAJU JAYA MOTOR");
-            System.out.println("=================================");
-            System.out.println("1. Tambah Kendaraan");
-            System.out.println("2. Lihat Inventaris");
-            System.out.println("3. Keluar");
-            System.out.print("Pilih Menu : ");
+        while (lanjut) {
+            System.out.println("\n=== MENU PEMINJAMAN ===");
+            System.out.println("1. Buku Cetak");
+            System.out.println("2. E-Book");
+            System.out.print("Pilih menu: ");
 
+            int pilihan;
             try {
-                menu = sc.nextInt();
+                pilihan = sc.nextInt();
                 sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Input harus angka!");
+                sc.nextLine();
+                continue;
+            }
 
-                switch (menu) {
-                    case 1 -> menuTambah();
-                    case 2 -> menuLihat();
-                    case 3 -> System.out.println("Terima kasih telah menggunakan program");
-                    default -> System.out.println("Menu tidak tersedia!");
+            System.out.print("Judul Buku: ");
+            String judul = sc.nextLine();
+
+            int tahun;
+            while (true) {
+                try {
+                    System.out.print("Tahun Terbit: ");
+                    tahun = sc.nextInt();
+                    if (tahun < 0) throw new Exception();
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Input tidak valid!");
+                    sc.nextLine();
                 }
+            }
+
+            if (pilihan == 1) {
+                int halaman;
+                while (true) {
+                    try {
+                        System.out.print("Jumlah Halaman: ");
+                        halaman = sc.nextInt();
+                        if (halaman < 0) throw new Exception();
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Input tidak valid!");
+                        sc.nextLine();
+                    }
+                }
+                daftarBuku.add(new BukuCetak(judul, tahun, halaman));
+
+            } else if (pilihan == 2) {
+                double ukuran;
+                while (true) {
+                    try {
+                        System.out.print("Ukuran File (MB): ");
+                        ukuran = sc.nextDouble();
+                        if (ukuran < 0) throw new Exception();
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Input tidak valid!");
+                        sc.nextLine();
+                    }
+                }
+                daftarBuku.add(new EBook(judul, tahun, ukuran));
+            } else {
+                System.out.println("Menu tidak tersedia!");
+                continue;
+            }
+
+            System.out.print("Tambah buku lagi? (y/n): ");
+            lanjut = sc.next().equalsIgnoreCase("y");
+            sc.nextLine();
+        }
+
+        int hariTerlambat;
+        while (true) {
+            try {
+                System.out.print("\nJumlah hari keterlambatan: ");
+                hariTerlambat = sc.nextInt();
+                if (hariTerlambat < 0) throw new Exception();
+                break;
             } catch (Exception e) {
-                System.out.println("Input harus berupa angka!");
+                System.out.println("Input tidak valid!");
                 sc.nextLine();
-                menu = 0;
-            }
-        } while (menu != 3);
-    }
-
-    static void menuTambah() {
-        try {
-            System.out.println("\n1. Mobil");
-            System.out.println("2. Motor");
-            System.out.print("Pilih Jenis Kendaraan : ");
-            int pilih = sc.nextInt();
-            sc.nextLine();
-
-            System.out.print("Masukkan Nama Kendaraan : ");
-            String nama = sc.nextLine();
-
-            System.out.print("Masukkan Harga : ");
-            double harga = sc.nextDouble();
-            sc.nextLine();
-
-            Kendaraan k = null;
-
-            if (pilih == 1) {
-                System.out.print("Masukkan Jumlah Pintu : ");
-                int pintu = sc.nextInt();
-                k = new Mobil(nama, harga, pintu);
-            } else if (pilih == 2) {
-                sc.nextLine();
-                System.out.print("Masukkan Jenis Motor : ");
-                String jenis = sc.nextLine();
-                k = new Motor(nama, harga, jenis);
-            }
-
-            if (k != null) {
-                data.add(k);
-                simpanFile(k);
-                System.out.println("Data kendaraan berhasil ditambahkan");
-            }
-
-        } catch (Exception e) {
-            System.out.println("Terjadi kesalahan input!");
-            sc.nextLine();
-        }
-    }
-
-    static void menuLihat() {
-        System.out.println("\n===== DATA INVENTARIS KENDARAAN =====");
-        if (data.isEmpty()) {
-            System.out.println("Data masih kosong");
-        } else {
-            for (Kendaraan k : data) {
-                System.out.println(k.tampilInfo());
             }
         }
-    }
 
-    static void simpanFile(Kendaraan k) {
-        try {
-            PrintWriter pw = new PrintWriter(new FileWriter("inventaris.txt", true));
-            pw.println(k.tampilInfo());
-            pw.close();
-        } catch (Exception e) {
-            System.out.println("Gagal menyimpan file");
+        int totalDenda = 0;
+
+        System.out.println("\n=== DAFTAR BUKU ===");
+        for (Buku b : daftarBuku) {
+            int denda = b.hitungDenda(hariTerlambat);
+            totalDenda += denda;
+            System.out.println(b.getDetail());
+            System.out.println("Denda: Rp " + denda);
+        }
+
+        System.out.println("\nTotal Denda: Rp " + totalDenda);
+
+        try (FileWriter fw = new FileWriter("data_peminjaman.txt")) {
+            for (Buku b : daftarBuku) {
+                fw.write(b.getDetail() + "\n");
+            }
+            fw.write("Hari Terlambat: " + hariTerlambat + "\n");
+            fw.write("Total Denda: Rp " + totalDenda);
+            System.out.println("\nData berhasil tersimpan ke txt");
+        } catch (IOException e) {
+            System.out.println("Gagal menyimpan file!");
         }
     }
 }
